@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CrmOpenFormSubmitWatcher</RootNamespace>
     <AssemblyName>CrmOpenFormSubmitWatcher</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -56,7 +57,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ProdwareSoapClient\ProdwareSoapClient.csproj">
+    <ProjectReference Include="..\ProdwareSoapClient\ProdwareSoapClient.csproj">
       <Project>{41a23d8e-56a0-477d-b960-34f4b81eae56}</Project>
       <Name>ProdwareSoapClient</Name>
     </ProjectReference>

@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrmOpenFormSubmitWatcher", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProdwareFileWatcher", "ProdwareFileWatcher\ProdwareFileWatcher.csproj", "{BD25D90B-9EB2-42FB-8619-A50249275759}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProdwareSoapClient", "..\ProdwareSoapClient\ProdwareSoapClient.csproj", "{41A23D8E-56A0-477D-B960-34F4B81EAE56}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProdwareSoapClient", "ProdwareSoapClient\ProdwareSoapClient.csproj", "{41A23D8E-56A0-477D-B960-34F4B81EAE56}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -15,7 +15,7 @@ namespace CrmOpenFormSubmitWatcher
                 if (args.Length != 1)
                 {
                     // Display the proper way to call the program.
-                    Console.WriteLine("Usage: Watcher.exe (directory)");
+                    Console.WriteLine("Usage: CrmOpenFormSubmitWatcher.exe (directory)");
                     return;
                 }
 

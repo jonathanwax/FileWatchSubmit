@@ -30,7 +30,16 @@ namespace CrmOpenFormSubmitWatcher
         {
             string xml = content;
             Request request = new ProdwareSoapClient.Request();
-            request.Submit(xml);
+            int result = request.Submit(xml);
+
+            if(result == 200)
+            {
+                Console.WriteLine("Done");
+            }
+            else
+            {
+                Console.Error.WriteLine("ERROR");
+            }
         }
 
     }
