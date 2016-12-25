@@ -1,19 +1,16 @@
-﻿using NLog;
+﻿using CrmOpenFormSubmitWatcher;
+using NLog;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Linq;
+using System.Configuration;
 using System.ServiceProcess;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CrmOpenFormSubmitService
 {
     public partial class ParseAndSubmitService : ServiceBase
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
+        FormSubmitter submitter = null;
+
         public ParseAndSubmitService()
         {
             InitializeComponent();
@@ -30,11 +27,37 @@ namespace CrmOpenFormSubmitService
             //logger.Error("Sample error message");
             //logger.Fatal("Sample fatal error message");
 
+            try
+            {
+
+                string path = ConfigurationManager.AppSettings["watchFolder"];
+
+                // If a directory is not specified, exit program.
+                if (string.IsNullOrEmpty(path))
+                {
+                    // Display the proper way to call the program.
+                    logger.Warn("Check config for watchFolder. It cannot be missing or empty.");
+                    return;
+                }
+
+                logger.Info("Watching Folder: {0}", path);
+
+                submitter = new FormSubmitter(path);
+                
+            }
+            catch (Exception ex)
+            {
+                logger.Error("Exception: {0}", ex.Message);
+                //throw ex; - don't throw to keep service alive
+            }
+
+
         }
 
         protected override void OnStop()
         {
             logger.Info("OnStop");
+            submitter = null;
         }
     }
 }

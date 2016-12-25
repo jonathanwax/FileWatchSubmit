@@ -1,25 +1,32 @@
 ﻿using Easy.MessageHub;
+using NLog;
 using System;
 using System.IO;
 using System.Security.Permissions;
+using System.Threading;
 
 namespace ProdwareFileWatcher
 {
     public class FileWatcher
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         private readonly IMessageHub _hub;
 
         [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
-        public FileWatcher(string path)
+        public FileWatcher(string path, string domain, string user, string password)
         {
             try
             {
+
+                logger.Info("FileWatcher({0})", path);
 
                 _hub = MessageHub.Instance;
 
                 // Create a new FileSystemWatcher and set its properties.
                 FileSystemWatcher watcher = new FileSystemWatcher();
                 watcher.Path = path;
+               
                 /* Watch for changes in LastAccess and LastWrite times, and
                    the renaming of files or directories. */
                 watcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite
@@ -40,6 +47,7 @@ namespace ProdwareFileWatcher
             }
             catch (Exception ex)
             {
+                logger.Fatal(ex, ex.Message);
                 throw ex;
             }
         }
@@ -48,18 +56,56 @@ namespace ProdwareFileWatcher
         private void OnCreated(object source, FileSystemEventArgs e)
         {
             // Specify what is done when a file is changed, created, or deleted.
-            Console.WriteLine("File: " + e.FullPath + " " + e.ChangeType);
+            logger.Info("OnCreated({0}, {1})", e.FullPath, e.ChangeType);
 
             try
             {
-                string text = File.ReadAllText(e.FullPath);
-                _hub.Publish<string>(text);
+                
+                // read file without locking
+                if (GetExclusiveFileLock(e.FullPath))
+                {
+                    using (var fileStream = new FileStream(e.FullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    {
+                        using (var textReader = new StreamReader(fileStream))
+                        {
+                            var content = textReader.ReadToEnd();
+                            _hub.Publish<string>(content);
+                        }
+                    }
+                }
+
             }
             catch (Exception ex)
             {
+                logger.Fatal(ex, ex.Message);
                 throw ex;
             }
 
+        }
+
+        private bool GetExclusiveFileLock(string path)
+        {
+            var fileReady = false;
+            const int MaximumAttemptsAllowed = 30;
+            var attemptsMade = 0;
+
+            while (!fileReady && attemptsMade <= MaximumAttemptsAllowed)
+            {
+                try
+                {
+                    using (File.Open(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+                    {
+                        fileReady = true;
+                    }
+                }
+                catch (IOException)
+                {
+                    attemptsMade++;
+                    Thread.Sleep(100);
+                }
+            }
+
+            return fileReady;
         }
 
         //private static void OnRenamed(object source, RenamedEventArgs e)

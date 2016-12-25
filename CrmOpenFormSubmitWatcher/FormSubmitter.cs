@@ -1,4 +1,5 @@
 ﻿using Easy.MessageHub;
+using NLog;
 using ProdwareFileWatcher;
 using ProdwareSoapClient;
 using System;
@@ -7,11 +8,14 @@ namespace CrmOpenFormSubmitWatcher
 {
     class FormSubmitter
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         private readonly IMessageHub _hub;
         private readonly Guid _subscriptionToken;
 
         public FormSubmitter(string path)
         {
+            logger.Info("FormSubmitter({path})", path);
             // subscribe to events
             _hub = MessageHub.Instance;
             _subscriptionToken = _hub.Subscribe<string>(OnFileCreated);
@@ -28,17 +32,18 @@ namespace CrmOpenFormSubmitWatcher
 
         private void OnFileCreated(string content)
         {
+            logger.Info("OnFileCreated({0})", content);
             string xml = content;
-            Request request = new ProdwareSoapClient.Request();
+            Request request = new Request();
             int result = request.Submit(xml);
 
             if(result == 200)
             {
-                Console.WriteLine("Done");
+                logger.Info("Done");
             }
             else
             {
-                Console.Error.WriteLine("ERROR");
+                logger.Error("ERROR {0}", result);
             }
         }
 

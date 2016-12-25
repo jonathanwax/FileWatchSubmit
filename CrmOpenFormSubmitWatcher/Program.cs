@@ -1,21 +1,24 @@
-﻿using Easy.MessageHub;
-using ProdwareFileWatcher;
+﻿using NLog;
 using System;
 
 namespace CrmOpenFormSubmitWatcher
 {
     class Program
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         static void Main(string[] args)
         {
 
             try
             {
+                logger.Info("Main({0})", args);
+
                 // If a directory is not specified, exit program.
                 if (args.Length != 1)
                 {
                     // Display the proper way to call the program.
-                    Console.WriteLine("Usage: CrmOpenFormSubmitWatcher.exe (directory)");
+                    logger.Warn("Usage: CrmOpenFormSubmitWatcher.exe (directory)");
                     return;
                 }
 
@@ -29,7 +32,7 @@ namespace CrmOpenFormSubmitWatcher
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine("Exception: " + ex.Message);
+                logger.Fatal(ex, ex.Message);
                 throw ex;
             }
             
