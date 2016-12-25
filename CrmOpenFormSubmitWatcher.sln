@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProdwareFileWatcher", "Prod
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProdwareSoapClient", "ProdwareSoapClient\ProdwareSoapClient.csproj", "{41A23D8E-56A0-477D-B960-34F4B81EAE56}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrmOpenFormSubmitService", "CrmOpenFormSubmitService\CrmOpenFormSubmitService.csproj", "{F59F7C1D-5B0E-46A7-8B7B-CD2AD50B47E5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{41A23D8E-56A0-477D-B960-34F4B81EAE56}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41A23D8E-56A0-477D-B960-34F4B81EAE56}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41A23D8E-56A0-477D-B960-34F4B81EAE56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F59F7C1D-5B0E-46A7-8B7B-CD2AD50B47E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F59F7C1D-5B0E-46A7-8B7B-CD2AD50B47E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F59F7C1D-5B0E-46A7-8B7B-CD2AD50B47E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F59F7C1D-5B0E-46A7-8B7B-CD2AD50B47E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
