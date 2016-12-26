@@ -14,7 +14,7 @@ namespace ProdwareFileWatcher
         private readonly IMessageHub _hub;
 
         [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
-        public FileWatcher(string path, string domain, string user, string password)
+        public FileWatcher(string path)
         {
             try
             {
