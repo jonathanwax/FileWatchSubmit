@@ -1,5 +1,6 @@
 ﻿using NLog;
 using System;
+using System.Configuration;
 
 namespace CrmOpenFormSubmitWatcher
 {
@@ -14,17 +15,16 @@ namespace CrmOpenFormSubmitWatcher
             {
                 logger.Info("Main({0})", args);
 
-                // If a directory is not specified, exit program.
-                if (args.Length != 1)
+                string path = ConfigurationManager.AppSettings["watchFolder"];
+                int interval = 0;
+
+                if (!int.TryParse(ConfigurationManager.AppSettings["watchInterval"], out interval))
                 {
-                    // Display the proper way to call the program.
-                    logger.Warn("Usage: CrmOpenFormSubmitWatcher.exe (directory)");
+                    logger.Error("watchInterval is not an integer. Check config file.");
                     return;
                 }
 
-                string path = args[0];
-
-                FormSubmitter submitter = new FormSubmitter(path);
+                FormSubmitter submitter = new FormSubmitter(path, interval);
 
                 // Wait for the user to quit the program.
                 Console.WriteLine("Press \'q\' to quit the sample.");

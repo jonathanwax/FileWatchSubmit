@@ -12,20 +12,25 @@ namespace CrmOpenFormSubmitWatcher
 
         private readonly IMessageHub _hub;
         private readonly Guid _subscriptionToken;
+        private FileWatcher watcher;
+        private FolderMonitor monitor;
 
-        public FormSubmitter(string path)
+        public FormSubmitter(string path, int interval)
         {
+
             logger.Info("FormSubmitter({path})", path);
             // subscribe to events
             _hub = MessageHub.Instance;
             _subscriptionToken = _hub.Subscribe<string>(OnFileCreated);
 
-            FileWatcher watcher = new FileWatcher(path);
+            //watcher = new FileWatcher(path);
+            monitor = new FolderMonitor(path, interval);
 
         }
 
         ~FormSubmitter()
         {
+            watcher = null;
             _hub.UnSubscribe(_subscriptionToken);
             _hub.ClearSubscriptions();
         }

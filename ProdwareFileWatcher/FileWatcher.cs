@@ -26,7 +26,7 @@ namespace ProdwareFileWatcher
                 // Create a new FileSystemWatcher and set its properties.
                 FileSystemWatcher watcher = new FileSystemWatcher();
                 watcher.Path = path;
-               
+
                 /* Watch for changes in LastAccess and LastWrite times, and
                    the renaming of files or directories. */
                 watcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite
@@ -60,20 +60,9 @@ namespace ProdwareFileWatcher
 
             try
             {
-                
-                // read file without locking
-                if (GetExclusiveFileLock(e.FullPath))
-                {
-                    using (var fileStream = new FileStream(e.FullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                    {
-                        using (var textReader = new StreamReader(fileStream))
-                        {
-                            var content = textReader.ReadToEnd();
-                            _hub.Publish<string>(content);
-                        }
-                    }
-                }
-
+                var reader = new FileReader();
+                var content = reader.ReadFile(e.FullPath);
+                _hub.Publish<string>(content);
             }
             catch (Exception ex)
             {
@@ -81,31 +70,6 @@ namespace ProdwareFileWatcher
                 throw ex;
             }
 
-        }
-
-        private bool GetExclusiveFileLock(string path)
-        {
-            var fileReady = false;
-            const int MaximumAttemptsAllowed = 30;
-            var attemptsMade = 0;
-
-            while (!fileReady && attemptsMade <= MaximumAttemptsAllowed)
-            {
-                try
-                {
-                    using (File.Open(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
-                    {
-                        fileReady = true;
-                    }
-                }
-                catch (IOException)
-                {
-                    attemptsMade++;
-                    Thread.Sleep(100);
-                }
-            }
-
-            return fileReady;
         }
 
         //private static void OnRenamed(object source, RenamedEventArgs e)

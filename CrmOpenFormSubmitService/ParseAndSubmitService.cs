@@ -31,6 +31,7 @@ namespace CrmOpenFormSubmitService
             {
 
                 string path = ConfigurationManager.AppSettings["watchFolder"];
+                int interval = 0;
 
                 // If a directory is not specified, exit program.
                 if (string.IsNullOrEmpty(path))
@@ -42,7 +43,15 @@ namespace CrmOpenFormSubmitService
 
                 logger.Info("Watching Folder: {0}", path);
 
-                submitter = new FormSubmitter(path);
+                if (!int.TryParse(ConfigurationManager.AppSettings["watchInterval"], out interval))
+                {
+                    logger.Error("watchInterval is not an integer. Check config file.");
+                    return;
+                }
+
+                logger.Info("Watch Interval: {0} secs", interval);
+
+                submitter = new FormSubmitter(path, interval);
                 
             }
             catch (Exception ex)
