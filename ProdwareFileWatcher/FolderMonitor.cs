@@ -29,28 +29,50 @@ namespace ProdwareFileWatcher
             logger.Debug("FolderMonitor({0}, {1})", path, interval);
 
             this.FolderPath = path;
-            this.Interval = interval;
-
-            StartTimer(interval);
+            this.Interval = interval * 1000;
         }
 
         ~FolderMonitor()
         {
             logger.Debug("~FolderMonitor() - destructor");
-            timer.Stop();
-            timer.Dispose();
+            StopTimer();
         }
 
-        private void StartTimer(int interval)
+        public void StartTimer()
         {
-            logger.Debug("StartTimer({0})", interval * 1000);
-            timer = new Timer(interval * 1000); // in miliseconds
-            //When autoreset is True there are reentrancy problems.
-            timer.AutoReset = false;
+            logger.Debug("StartTimer()");
+            try
+            {
+                logger.Debug("StartTimer({0})", this.Interval);
+                timer = new Timer(this.Interval);
+                timer.AutoReset = true;
+                timer.Elapsed += new ElapsedEventHandler(CheckFolder);
+                timer.Enabled = true;
 
-            timer.Elapsed += new ElapsedEventHandler(CheckFolder);
+                timer.Start();
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, ex.Message);
+                //throw ex;
+            }
 
-            timer.Start();
+        }
+
+        public void StopTimer()
+        {
+            logger.Debug("StopTimer()");
+            try
+            {
+                timer.Stop();
+                timer.Dispose();
+                timer = null;
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, ex.Message);
+                //throw ex;
+            }
         }
 
         private void CheckFolder(object sender, ElapsedEventArgs e)

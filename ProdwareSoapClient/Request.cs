@@ -10,20 +10,18 @@ namespace ProdwareSoapClient
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
-        string url = "http://192.168.93.222:8082/CRMPRODWARE/HttpFront.aspx"; //'Web service URL'
-        string action = "/soap/action/query"; //the SOAP method/action name
         public Request()
         {
             logger.Debug("Request()");
         }
 
-        public int Submit(string xml)
+        public int Submit(string url, string action, string xml)
         {
 
             try
             {
-
-                logger.Info("Submit({0})", xml);
+                logger.Info("Submit({0}, {1})", url, action);
+                logger.Debug("Submit({0})", xml);
 
                 var soapEnvelopeXml = CreateSoapEnvelope(xml);
                 var soapRequest = CreateSoapRequest(url, action);
@@ -71,8 +69,9 @@ namespace ProdwareSoapClient
             }
             catch (Exception ex)
             {
-                logger.Fatal(ex, "Submit - EXCEPTION");
-                throw ex;
+                logger.Error(ex, ex.Message);
+                return 500;
+                //throw ex;
             }
             
         }

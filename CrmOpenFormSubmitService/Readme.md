@@ -20,5 +20,9 @@ Monitors a folder for Created *.txt files. Reads the file and submits it to CrmO
 5. > Icacls C:\shared /grant Everyone:F /inheritance:e /T     <--- Replace c:\shared with your folder and run
 
 
+
+cmdkey /add:<storage-account-name>.file.core.windows.net /user:<storage-account-name> /pass:<storage-account-key>
+
+
 net use [drive letter] \\notify365.file.core.windows.net\forms /u:notify365 xleVo5I+9ukF9HhnWBOsuHaeH8LIzfYlV68MUYQp5z7olnCb74xQp616nfF977ExzZh0XOiUmfc5j/s6Qltvtw==
 

@@ -1,0 +1,1 @@
+﻿Get-Content -Path 'C:\dev\CrmOpen\CrmOpenFormSubmitWatcher\CrmOpenFormSubmitService\bin\Debug\logs\log.txt' -Tail 10 -Wait

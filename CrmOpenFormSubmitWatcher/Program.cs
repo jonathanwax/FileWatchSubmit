@@ -13,18 +13,9 @@ namespace CrmOpenFormSubmitWatcher
 
             try
             {
-                logger.Info("Main({0})", args);
+                logger.Debug("Main({0})", args);
 
-                string path = ConfigurationManager.AppSettings["watchFolder"];
-                int interval = 0;
-
-                if (!int.TryParse(ConfigurationManager.AppSettings["watchInterval"], out interval))
-                {
-                    logger.Error("watchInterval is not an integer. Check config file.");
-                    return;
-                }
-
-                FormSubmitter submitter = new FormSubmitter(path, interval);
+                FormSubmitter submitter = new FormSubmitter();
 
                 // Wait for the user to quit the program.
                 Console.WriteLine("Press \'q\' to quit the sample.");
@@ -32,7 +23,7 @@ namespace CrmOpenFormSubmitWatcher
             }
             catch (Exception ex)
             {
-                logger.Fatal(ex, ex.Message);
+                logger.Error(ex, ex.Message);
                 throw ex;
             }
             
